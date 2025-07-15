@@ -13,6 +13,7 @@ A real-time basketball shot analysis tool using computer vision and AI. Analyze 
 - 🎥 Video recording and playback
 - 📈 Performance tracking over time
 - 🛠️ Customizable analysis parameters
+- 🚀 Low VRAM mode for systems with <10GB VRAM
 
 ## 🚀 Quick Start
 
@@ -107,6 +108,24 @@ python run_multi_ball_detector.py --ball-type SOCCER --use-ollama
 
 # Run without Ollama (color-based tracking only)
 python run_multi_ball_detector.py --ball-type VOLLEYBALL
+
+# Enable low VRAM mode for systems with <10GB VRAM
+python run_webcam_analyzer.py --low-vram --frame-skip 10 --resolution-scale 0.75
+```
+
+#### Performance Optimization
+
+For systems with less than 10GB VRAM, use these optimization flags:
+
+```bash
+# Basic low VRAM mode
+python run_webcam_analyzer.py --low-vram
+
+# More aggressive optimizations for very low VRAM
+python run_webcam_analyzer.py --low-vram --frame-skip 15 --resolution-scale 0.5 --no-hand-tracking
+
+# Fine-tune performance vs quality
+python run_webcam_analyzer.py --low-vram --resolution-scale 0.75 --frame-skip 8
 ```
 
 #### Runtime Controls
@@ -120,6 +139,32 @@ When running the application:
 ## 📚 Documentation
 
 For detailed instructions, configuration options, and troubleshooting, please see the [User Guide](USER_GUIDE.md).
+
+## 🖥️ System Requirements
+
+### Minimum Requirements
+- Python 3.8+
+- 4GB RAM
+- 2GB VRAM (with low VRAM mode enabled)
+- Webcam (for real-time analysis)
+
+### Recommended Requirements
+- Python 3.10+
+- 8GB RAM
+- 8GB+ VRAM
+- HD Webcam (1080p)
+
+### Low VRAM Mode
+
+The application includes optimizations for systems with limited VRAM:
+
+- Frame skipping: Process fewer frames (--frame-skip)
+- Resolution reduction: Scale down input resolution (--resolution-scale)
+- Model inference tuning: Optimized parameters for faster inference
+- Tracking simplification: Simplified tracking algorithms
+- Result caching: Cache analysis results to avoid reprocessing
+
+Enable these optimizations with the `--low-vram` flag.
 
 ## 👨‍💻 API Integration
 

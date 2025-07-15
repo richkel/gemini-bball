@@ -1,0 +1,100 @@
+# Basketball Shot Analyzer System Requirements
+
+This file outlines the minimum and recommended system requirements for running the Basketball Shot Analyzer with and without Ollama backend.
+
+## Without Ollama (Local Processing Only)
+
+### CPU Requirements
+- Base Processing: ~25-30% CPU usage
+- Tracking: ~15-20% CPU
+- Total: ~40-50% CPU usage
+
+### Memory Requirements
+- Frame buffer: ~100-150MB
+- Tracking state: ~50-100MB
+- Total: ~200-300MB RAM
+
+### GPU Requirements
+- Frame processing: ~5-10% GPU usage
+- Tracking: ~5-10% GPU usage
+- Total: ~10-20% GPU usage
+
+## With Ollama (Full Analysis)
+
+### CPU Requirements
+- Base Processing: ~25-30% CPU
+- Tracking: ~15-20% CPU
+- Ollama Communication: ~10-15% CPU
+- Total: ~50-65% CPU usage
+
+### Memory Requirements
+- Frame buffer: ~100-150MB
+- Tracking state: ~50-100MB
+- Ollama cache: ~100-200MB
+- Total: ~300-500MB RAM
+
+### GPU Requirements
+- Frame processing: ~5-10% GPU
+- Tracking: ~5-10% GPU
+- Total: ~10-20% GPU usage
+
+### Network Requirements
+- Frame uploads: ~10-20KB per frame
+- Response downloads: ~1-2KB per analysis
+- Total: ~100-120KB per second (at 1 FPS)
+
+## Recommended System Specifications
+
+### Minimum Requirements
+- CPU: 4+ cores, 2.5+ GHz
+- RAM: 8GB
+- GPU: Integrated or discrete with 2GB+ VRAM
+- Network: 100Mbps+ (for Ollama)
+
+### Recommended Requirements
+- CPU: 6+ cores, 3.0+ GHz
+- RAM: 16GB
+- GPU: Dedicated with 4GB+ VRAM
+- Network: 200Mbps+ (for Ollama)
+
+## Performance Optimization Settings
+
+### Low VRAM Mode (Default)
+- Frame skip: 10 (processes every 10th frame)
+- Resolution scale: 0.75 (reduces frame size)
+- Caching enabled (avoids reprocessing)
+
+### UI Responsiveness Improvements
+- Increase frame_skip (15-20)
+- Set resolution_scale to 0.5
+- Disable hand tracking if not needed
+- Use low_vram_mode for systems with <10GB RAM
+
+## Performance Tuning Parameters
+
+### Frame Processing
+- frame_skip: Controls frame processing rate (higher = less CPU/GPU usage)
+- resolution_scale: Controls frame resolution (lower = better performance)
+
+### Ollama Settings
+- ollama_timeout: Controls request timeout (default: 30 seconds)
+- ollama_retry_count: Number of retries (default: 2)
+- ollama_retry_delay: Delay between retries (default: 1 second)
+
+## Troubleshooting Performance Issues
+
+1. If UI is unresponsive:
+   - Increase frame_skip to 15-20
+   - Set resolution_scale to 0.5
+   - Disable hand tracking if not needed
+   - Use low_vram_mode
+
+2. If Ollama responses are slow:
+   - Increase ollama_timeout
+   - Increase ollama_retry_count
+   - Increase ollama_retry_delay
+
+3. If system is running out of memory:
+   - Reduce frame_skip
+   - Lower resolution_scale
+   - Use low_vram_mode

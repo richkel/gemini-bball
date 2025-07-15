@@ -1,0 +1,2 @@
+[console_scripts]
+basketball-analyzer = src.cli:main
