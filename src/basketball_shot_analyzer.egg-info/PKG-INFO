@@ -1,0 +1,118 @@
+Metadata-Version: 2.4
+Name: basketball_shot_analyzer
+Version: 0.1.0
+Summary: Basketball Shot Analyzer using Computer Vision and AI
+Home-page: https://github.com/yourusername/basketball-shot-analyzer
+Author: Your Name
+Author-email: your.email@example.com
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: opencv-python>=4.8.0
+Requires-Dist: mediapipe>=0.10.0
+Requires-Dist: numpy>=1.24.0
+Requires-Dist: python-dotenv>=1.0.0
+Requires-Dist: pillow>=10.0.0
+Requires-Dist: httpx>=0.24.0
+Requires-Dist: aiohttp>=3.8.4
+Requires-Dist: google-generativeai>=0.3.0
+Requires-Dist: protobuf>=4.25.0
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+# Basketball Shot Analyzer
+
+A real-time basketball shot analysis tool using computer vision and AI. Analyze shooting form, track shot accuracy, and get performance metrics in real-time or from recorded videos.
+
+![Basketball Shot Analyzer Demo](demo.gif)
+
+## ✨ Features
+
+- 🎯 Real-time shot detection and analysis
+- 🤖 Multiple AI backends (Ollama, Gemini)
+- 📊 Shot statistics and performance metrics
+- 🎥 Video recording and playback
+- 📈 Performance tracking over time
+- 🛠️ Customizable analysis parameters
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Python 3.8+
+- Webcam (for real-time analysis)
+- [Ollama](https://ollama.ai/) installed (for local analysis)
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/basketball-shot-analyzer.git
+   cd basketball-shot-analyzer
+   ```
+
+2. Create and activate a virtual environment (recommended):
+   ```bash
+   # Windows
+   python -m venv venv
+   .\venv\Scripts\activate
+   
+   # macOS/Linux
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
+
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Start the Ollama server (for local analysis):
+   ```bash
+   ollama serve
+   ```
+
+### Basic Usage
+
+```bash
+# Run with default settings (Ollama backend)
+python -m src.cli
+
+# Analyze a video file
+python -m src.cli --source path/to/your/video.mp4
+
+# Save analysis to file
+python -m src.cli --output analysis_results.mp4
+
+# Use Gemini backend (requires API key)
+export GOOGLE_API_KEY=your_api_key
+python -m src.cli --backend gemini
+```
+
+## 📖 Documentation
+
+For detailed instructions, configuration options, and troubleshooting, please see the [User Guide](USER_GUIDE.md).
+
+## 📊 Example Output
+
+```
+2025-07-07 15:30:45,123 - Shot detected: JUMP_SHOT - MADE (Confidence: 0.92)
+2025-07-07 15:30:52,789 - Shot detected: THREE_POINTER - MISSED (Confidence: 0.87)
+2025-07-07 15:31:00,000 - Analysis complete: 5 shots, 3 made (60.0%)
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please see our [Contributing Guidelines](CONTRIBUTING.md) for more information.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

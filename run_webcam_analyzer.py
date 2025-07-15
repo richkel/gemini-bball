@@ -39,7 +39,13 @@ class WebcamAnalyzer:
         enable_ball_tracking: bool = True,
         ball_type: str = "BASKETBALL",
         use_ollama_detection: bool = True,
-        ollama_model: str = "gemma3:12b-it-q4_K_M"
+        ollama_model: str = "gemma3:12b-it-q4_K_M",
+        low_vram_mode: bool = True,
+        enable_caching: bool = True,
+        resolution_scale: float = 1.0,
+        ollama_timeout: float = 30.0,
+        ollama_retry_count: int = 2,
+        ollama_retry_delay: float = 1.0
     ):
         """Initialize the webcam analyzer.
         
@@ -57,6 +63,9 @@ class WebcamAnalyzer:
             ball_type: Type of ball to track (BASKETBALL, TENNIS, SOCCER, VOLLEYBALL, BASEBALL, GENERIC)
             use_ollama_detection: Whether to use Ollama for object detection
             ollama_model: Ollama model to use for object detection
+            low_vram_mode: Enable optimizations for systems with <10GB VRAM
+            enable_caching: Enable frame caching to avoid reprocessing
+            resolution_scale: Scale factor for input resolution (0.5-1.0, lower for better performance)
         """
         self.camera_index = camera_index
         self.width = width
@@ -67,6 +76,20 @@ class WebcamAnalyzer:
         self.api_key = api_key  # Store API key as instance variable
         self.enable_hand_tracking = enable_hand_tracking  # Store hand tracking setting
         self.enable_ball_tracking = enable_ball_tracking  # Store ball tracking setting
+        self.low_vram_mode = low_vram_mode  # Store low VRAM mode setting
+        self.enable_caching = enable_caching  # Store caching setting
+        self.resolution_scale = resolution_scale  # Store resolution scale factor
+        
+        # Apply resolution scaling if needed
+        if resolution_scale < 1.0:
+            self.width = int(width * resolution_scale)
+            self.height = int(height * resolution_scale)
+            logger.info(f"Applied resolution scaling: {width}x{height} → {self.width}x{self.height}")
+        
+        # Adjust frame skip for low VRAM mode
+        if low_vram_mode and frame_skip < 5:
+            self.frame_skip = 5
+            logger.info(f"Increased frame skip to {self.frame_skip} for low VRAM mode")
         
         # Convert string ball type to enum
         self.ball_type = BallType.from_string(ball_type)
@@ -75,8 +98,15 @@ class WebcamAnalyzer:
         # Ollama detection settings
         self.use_ollama_detection = use_ollama_detection
         self.ollama_model = ollama_model
+        self.ollama_timeout = 30.0  # Default timeout in seconds
+        self.ollama_retry_count = 2  # Default retry count
+        self.ollama_retry_delay = 1.0  # Default retry delay in seconds
+        
         if use_ollama_detection:
             logger.info(f"Using Ollama for object detection with model {ollama_model}")
+            logger.info(f"Ollama timeout: {self.ollama_timeout} seconds")
+            logger.info(f"Ollama retry count: {self.ollama_retry_count}")
+            logger.info(f"Ollama retry delay: {self.ollama_retry_delay} seconds")
         
         # Initialize the analyzer
         self.analyzer = None
@@ -98,6 +128,8 @@ class WebcamAnalyzer:
             model_name=model_name,
             video_source=self.camera_index,
             frame_skip=self.frame_skip,
+            frame_width=self.width,
+            frame_height=self.height,
             show_preview=True,
             save_output=False,
             api_key=api_key,
@@ -105,7 +137,9 @@ class WebcamAnalyzer:
             enable_ball_tracking=enable_ball_tracking,
             ball_type=self.ball_type,
             use_ollama_detection=use_ollama_detection,
-            ollama_model=ollama_model
+            ollama_model=ollama_model,
+            low_vram_mode=low_vram_mode,
+            enable_caching=enable_caching
         )
     
     async def initialize(self):
@@ -298,6 +332,12 @@ async def main():
                        help='Use Ollama for object detection as fallback')
     parser.add_argument('--ollama-model', type=str, default="gemma3:12b-it-q4_K_M",
                        help='Ollama model to use for object detection (default: gemma3:12b-it-q4_K_M)')
+    parser.add_argument('--low-vram', action='store_true',
+                       help='Enable optimizations for systems with <10GB VRAM')
+    parser.add_argument('--no-cache', action='store_true',
+                       help='Disable frame caching')
+    parser.add_argument('--resolution-scale', type=float, default=1.0,
+                       help='Scale factor for input resolution (0.5-1.0, lower for better performance)')
     
     args = parser.parse_args()
     
@@ -315,7 +355,10 @@ async def main():
         enable_ball_tracking=not args.no_ball_tracking,
         ball_type=args.ball_type,
         use_ollama_detection=args.use_ollama_detection,
-        ollama_model=args.ollama_model
+        ollama_model=args.ollama_model,
+        low_vram_mode=args.low_vram,
+        enable_caching=not args.no_cache,
+        resolution_scale=args.resolution_scale
     )
     
     # Print configuration
@@ -327,6 +370,14 @@ async def main():
     logger.info(f"  Ball type: {args.ball_type}")
     logger.info(f"  Hand tracking: {not args.no_hand_tracking}")
     logger.info(f"  Ball tracking: {not args.no_ball_tracking}")
+    logger.info(f"  Low VRAM mode: {args.low_vram}")
+    logger.info(f"  Frame caching: {not args.no_cache}")
+    logger.info(f"  Resolution scale: {args.resolution_scale}")
+    logger.info(f"  Frame skip: {args.frame_skip}")
+    
+    if args.low_vram:
+        logger.info("Low VRAM mode enabled - using optimized settings for systems with <10GB VRAM")
+        logger.info("Performance tips: Increase --frame-skip or decrease --resolution-scale for better performance")
     
     try:
         await analyzer.run()
