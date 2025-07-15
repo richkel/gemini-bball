@@ -1,0 +1,8 @@
+"Tool/Repo Name","Functionality","Platform(s)","Reference"
+"MediaPipe Core","Object tracking, pose, hand, face detection","Android, iOS, Web, Python","https://github.com/google-ai-edge/mediapipe"
+"Box Tracking","Real-time box/object tracking","Cross-platform","https://github.com/google/mediapipe/blob/master/docs/solutions/box_tracking.md"
+"Objectron","3D object detection and pose estimation","Mobile, Desktop","https://mediapipe.readthedocs.io/en/latest/solutions/objectron.html"
+"Pose, Face, Hand Detection (AISoltani)","Body, face, hand landmark detection","Python","https://github.com/AISoltani/MediaPipe_Pose_Face_Hand_Detection"
+"Full-Body Estimation (nicknochnack)","Holistic body, face, hand tracking","Python","https://www.youtube.com/watch?v=pG4sUNDOZFg"
+"Custom Object Detection (MediaPipe Model Maker)","Train custom object detectors","Python, Web","https://colab.research.google.com/github/googlesamples/mediapipe/blob/main/tutorials/object_detection/Object_Detection_for_3_dogs.ipynb"
+"OpenVINO MediaPipe Object Detection Demo","Object detection with efficient inference","Python, Docker","https://docs.openvino.ai/2025/model-server/ovms_docs_demo_mediapipe_object_detection.html"
